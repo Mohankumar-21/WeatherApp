@@ -117,34 +117,31 @@ const createWeatherCard= (cityName, weatheritem, index) =>
          
     };
 
-const getUserCoordinates = async () =>
-{
-    navigator.geolocation.getCurrentPosition(
-        position =>
-        {
-           const { latitude , longitude} = position.coords;
-
-           const reverseCodingUrl = `http://api.openweathermap.org/geo/1.0/reverse?lat=${latitude}&lon=${longitude}&limit=1&appid=${apiKey}`;
-            fetch(reverseCodingUrl).then(res=>res.json()).then(data=>
-                {
-                    const { name } = data[0];
-                    displayWeatherInfo(name, latitude, longitude);
-
-                    
-                }).catch(()=>
-                {
-                    alert("An error occured while fetching the city");
-                })
-        },
-        error =>
-        {
-           if(error.code === error.PERMISSION_DENIED)
-           {
-              alert("Geolocation request denied. Please reset location permission to grant access again")
-           }
-        }
-    );
-}
+    const getUserCoordinates = async () => {
+        navigator.geolocation.getCurrentPosition(
+            position => {
+                const { latitude, longitude } = position.coords;
+    
+                const reverseCodingUrl = `https://api.openweathermap.org/geo/1.0/reverse?lat=${latitude}&lon=${longitude}&limit=1&appid=${apiKey}`;
+                
+                fetch(reverseCodingUrl)
+                    .then(res => res.json())
+                    .then(data => {
+                        const { name } = data[0];
+                        displayWeatherInfo(name, latitude, longitude);
+                    })
+                    .catch(() => {
+                        alert("An error occurred while fetching the city");
+                    });
+            },
+            error => {
+                if (error.code === error.PERMISSION_DENIED) {
+                    alert("Geolocation request denied. Please reset location permission to grant access again");
+                }
+            }
+        );
+    }
+    
 
 searchButton.addEventListener("click", getCityWeatherInfo);
 currentLocation.addEventListener("click", getUserCoordinates);
